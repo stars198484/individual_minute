@@ -14,18 +14,18 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/button12"
+            android:id="@+id/btStart"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Button" />
+            android:text="@string/btn_start" />
 
         <Button
-            android:id="@+id/button11"
+            android:id="@+id/btStop"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Button" />
+            android:text="@string/btn_stop" />
     </LinearLayout>
 
     <LinearLayout
