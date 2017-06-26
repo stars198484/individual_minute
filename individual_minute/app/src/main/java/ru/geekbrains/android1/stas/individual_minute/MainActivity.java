@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.sip.SipAudioCall;
+import android.renderscript.Sampler;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -17,8 +18,12 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.TimeZone;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener, LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -28,7 +33,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     ListView lvData;
     DB db;
     SimpleCursorAdapter scAdapter;
-    String dateNow, timeStart, timeEnd;
+    String dateNow, time;
+    Long startMillis, stopMillis;
+    Date date = new Date();
+    GregorianCalendar calendar = new GregorianCalendar();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +56,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         lvData.setOnItemClickListener(this);
         registerForContextMenu(lvData);
         getSupportLoaderManager().initLoader(0, null, this);
-        Date date = new Date();
 
     }
 
@@ -57,11 +64,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (view.getId()) {
             case R.id.btStart: {
                 btnStart.setEnabled(false);
+//                Date hireDay = calendar.getTime();
+                startMillis = date.getTime();
 
+                Calendar now = Calendar.getInstance( TimeZone.getDefault() );
+                int year = now.get(Calendar.YEAR);
+                int month = now.get(Calendar.MONTH);
+                int hour = now.get(Calendar.HOUR_OF_DAY);
+                int minute = now.get(Calendar.MINUTE);
+                dateNow = String.valueOf(month) + '.' + String.valueOf(year) + ' ' + String.valueOf(hour)+ ':' + String.valueOf(minute);
+                Toast toast = Toast.makeText(getApplicationContext(),
+                        dateNow + ' ' + startMillis, Toast.LENGTH_LONG);
+                toast.show();
                 break;
             }
             case R.id.btStop: {
                 btnStart.setEnabled(true);
+                stopMillis = date.getTime();
+                time = String.valueOf(((stopMillis - startMillis)*1000));
+                Toast toast = Toast.makeText(getApplicationContext(),
+                       time+ ' ' + stopMillis, Toast.LENGTH_LONG);
+                toast.show();
                 break;
             }
         }
@@ -115,9 +138,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             this.db = db;
         }
 
-//        @Override
-//        public Cursor loadInBackground() {
-//            return db.getNameData(tmpStr);
-//        }
+        @Override
+        public Cursor loadInBackground() {
+            return null;
+        }
     }
 }
