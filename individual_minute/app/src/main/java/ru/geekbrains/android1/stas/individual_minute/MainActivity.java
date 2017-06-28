@@ -35,8 +35,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     SimpleCursorAdapter scAdapter;
     String dateNow, time;
     Long startMillis, stopMillis;
-    Date date = new Date();
-    GregorianCalendar calendar = new GregorianCalendar();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +59,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View view) {
+        Date date = new Date();
         switch (view.getId()) {
             case R.id.btStart: {
                 btnStart.setEnabled(false);
@@ -73,18 +72,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 int hour = now.get(Calendar.HOUR_OF_DAY);
                 int minute = now.get(Calendar.MINUTE);
                 dateNow = String.valueOf(month) + '.' + String.valueOf(year) + ' ' + String.valueOf(hour)+ ':' + String.valueOf(minute);
-                Toast toast = Toast.makeText(getApplicationContext(),
-                        dateNow + ' ' + startMillis, Toast.LENGTH_LONG);
-                toast.show();
+//                Toast toast = Toast.makeText(getApplicationContext(),
+//                        dateNow + ' ' + startMillis, Toast.LENGTH_LONG);
+//                toast.show();
                 break;
             }
             case R.id.btStop: {
                 btnStart.setEnabled(true);
                 stopMillis = date.getTime();
-                time = String.valueOf(((stopMillis - startMillis)*1000));
-                Toast toast = Toast.makeText(getApplicationContext(),
-                       time+ ' ' + stopMillis, Toast.LENGTH_LONG);
-                toast.show();
+                time = String.valueOf(((stopMillis - startMillis)/1000));
+//                Toast toast = Toast.makeText(getApplicationContext(),
+//                       time+ ' ' + stopMillis, Toast.LENGTH_LONG);
+//                toast.show();
                 break;
             }
         }
