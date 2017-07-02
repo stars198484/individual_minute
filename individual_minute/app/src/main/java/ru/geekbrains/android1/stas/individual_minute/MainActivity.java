@@ -18,6 +18,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.Calendar;
@@ -31,10 +32,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     Button btnStart;
     Button btnStop;
     ListView lvData;
+    TextView tvInfo;
     DB db;
     SimpleCursorAdapter scAdapter;
     String dateNow, time;
     Long startMillis, stopMillis;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +48,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         String[] from = new String[]{DB.COLUMN_DATE, DB.COLUMN_TIME};
         btnStart = (Button) findViewById(R.id.btStart);
         btnStop = (Button) findViewById(R.id.btStop);
+        tvInfo = (TextView) findViewById(R.id.tvInfo);
         btnStart.setOnClickListener(this);
         btnStop.setOnClickListener(this);
         int[] to = new int[]{R.id.txtDate, R.id.txtTime};
@@ -54,7 +58,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         lvData.setOnItemClickListener(this);
         registerForContextMenu(lvData);
         getSupportLoaderManager().initLoader(0, null, this);
-
+        btnStop.setEnabled(false);
+        tvInfo.setText(getString(R.string.info_ready));
     }
 
     @Override
@@ -62,32 +67,38 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Date date = new Date();
         switch (view.getId()) {
             case R.id.btStart: {
+                tvInfo.setText(getString(R.string.info_process));
+                btnStop.setEnabled(true);
                 btnStart.setEnabled(false);
 //                Date hireDay = calendar.getTime();
                 startMillis = date.getTime();
 
-                Calendar now = Calendar.getInstance( TimeZone.getDefault() );
+                Calendar now = Calendar.getInstance(TimeZone.getDefault());
                 int year = now.get(Calendar.YEAR);
                 int month = now.get(Calendar.MONTH);
                 int hour = now.get(Calendar.HOUR_OF_DAY);
                 int minute = now.get(Calendar.MINUTE);
-                dateNow = String.valueOf(month) + '.' + String.valueOf(year) + ' ' + String.valueOf(hour)+ ':' + String.valueOf(minute);
+                dateNow = String.valueOf(month) + '.' + String.valueOf(year) + ' ' + String.valueOf(hour) + ':' + String.valueOf(minute);
 //                Toast toast = Toast.makeText(getApplicationContext(),
 //                        dateNow + ' ' + startMillis, Toast.LENGTH_LONG);
 //                toast.show();
                 break;
             }
             case R.id.btStop: {
+                tvInfo.setText(getString(R.string.info_ready));
                 btnStart.setEnabled(true);
                 stopMillis = date.getTime();
-                time = String.valueOf(((stopMillis - startMillis)/1000));
+                time = String.valueOf(((stopMillis - startMillis) / 1000));
+                db.addRec(dateNow, time);
 //                Toast toast = Toast.makeText(getApplicationContext(),
 //                       time+ ' ' + stopMillis, Toast.LENGTH_LONG);
 //                toast.show();
+                btnStop.setEnabled(false);
                 break;
             }
         }
     }
+
     public void onCreateContextMenu(ContextMenu menu, View v,
                                     ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
@@ -132,6 +143,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     static class MyCursorLoader extends CursorLoader {
         DB db;
+
         MyCursorLoader(Context context, DB db) {
             super(context);
             this.db = db;

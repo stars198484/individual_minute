@@ -3,4 +3,6 @@
     <string name="btn_start">Start</string>
     <string name="btn_stop">Stop</string>
     <string name="delete_record">Удалить запись</string>
+    <string name="info_ready">Готов к измерению</string>
+    <string name="info_process">Ведите подчет</string>
 </resources>
