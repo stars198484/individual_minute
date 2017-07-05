@@ -1,8 +1,15 @@
 <resources>
-    <string name="app_name">individual_minute</string>
+    <string name="app_name">Индивидуальная минута</string>
     <string name="btn_start">Start</string>
     <string name="btn_stop">Stop</string>
     <string name="delete_record">Удалить запись</string>
     <string name="info_ready">Готов к измерению</string>
     <string name="info_process">Ведите подчет</string>
+    <string name="column_data">Дата</string>
+    <string name="column_time">Время</string>
+    <string name="menu_clear_DB">Стереть данные из БД</string>
+    <string name="menu_clear_lv">Очистить лист</string>
+    <string name="menu_result">Показать результаты</string>
+    <string name="end">Запись создана</string>
+    <string name="q_menu_clear_db">Вы действительно хотите стереть данные из БД?</string>
 </resources>
