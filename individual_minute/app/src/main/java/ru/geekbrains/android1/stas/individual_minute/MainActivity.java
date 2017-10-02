@@ -34,6 +34,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static final int CM_DELETE_ID = 1;
     Button btnStart;
     Button btnStop;
+    Button btnShow;
+    Button btnClear;
     ListView lvData;
     TextView tvInfo;
     DB db;
@@ -50,9 +52,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         db.open();
         btnStart = (Button) findViewById(R.id.btStart);
         btnStop = (Button) findViewById(R.id.btStop);
+        btnShow = (Button) findViewById(R.id.btShow);
+        btnClear = (Button) findViewById(R.id.btClear);
         tvInfo = (TextView) findViewById(R.id.tvInfo);
         btnStart.setOnClickListener(this);
         btnStop.setOnClickListener(this);
+        btnShow.setOnClickListener(this);
+        btnClear.setOnClickListener(this);
         lvData = (ListView) findViewById(R.id.lvData);
         lvData.setOnItemClickListener(this);
         registerForContextMenu(lvData);
@@ -80,13 +86,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //                Date hireDay = calendar.getTime();
                 startMillis = date.getTime();
 
-                Calendar now = Calendar.getInstance(TimeZone.getDefault());
+                Calendar now = Calendar.getInstance();
                 int year = now.get(Calendar.YEAR);
                 int month = now.get(Calendar.MONTH);
                 int day = now.get(Calendar.DAY_OF_MONTH);
                 int hour = now.get(Calendar.HOUR_OF_DAY);
                 int minute = now.get(Calendar.MINUTE);
-                dateNow = String.valueOf(day) + '.' +String.valueOf(month) + '.' + String.valueOf(year) + ' ' + String.valueOf(hour) + ':' + String.valueOf(minute);
+                dateNow = String.valueOf(day) + '.' +String.valueOf(month + 1) + '.' + String.valueOf(year) + ' ' + String.valueOf(hour) + ':' + String.valueOf(minute);
 //                Toast toast = Toast.makeText(getApplicationContext(),
 //                        dateNow + ' ' + startMillis, Toast.LENGTH_LONG);
 //                toast.show();
@@ -102,6 +108,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                        getString(R.string.end), Toast.LENGTH_LONG);
                 toast.show();
                 btnStop.setEnabled(false);
+                break;
+            }
+            case R.id.btShow: {
+                showData(DB.COLUMN_DATE, DB.COLUMN_TIME);
+                break;
+            }
+            case R.id.btClear: {
+                lvData.setAdapter(null);
                 break;
             }
         }
@@ -122,6 +136,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
                     db.clearDB();
+                    lvData.setAdapter(null);
                 }
             });
             builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
